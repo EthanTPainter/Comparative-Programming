@@ -185,6 +185,9 @@ def pass_fail(f, xs):
 
     x = 0
     y = 0
+    return list_pass, list_fail
+
+    #Not needed ???
     output = "["
     while x < len(list_pass):
         if x == len(list_pass)-1:
@@ -192,6 +195,7 @@ def pass_fail(f, xs):
         else:
             output += str(list_pass[x]) + ","
         x = x + 1
+
     output += "],["
     while y < len(list_fail):
         if y == len(list_fail)-1:
@@ -202,13 +206,19 @@ def pass_fail(f, xs):
     output += "]"
     return output
 
+#Use to reduce integer to binary solution
+def reduce_to_binary(n):
+    binary = 0
+
+    return binary
+
 #Given a list of values, create the power set
 #Includes the empty set as well
 def powerset(xs):
     empty_list = []
     #No numbers in list (Empty)
     if len(xs) == 0:
-        return str(empty_list)
+        return "[" + str(empty_list) + "]"
 
     #Get Squared number of expected number of sets
     sampleCount = 0
@@ -217,20 +227,34 @@ def powerset(xs):
         total = total * 2
         sampleCount = sampleCount + 1
 
+    #Answer: 2^n
     print("Sample Count:" + str(total))
 
     #Assuming numbers exist in the list
     output = "["
-    x = 0
+    x = 1
+    numElements = 1
     y = 0
-    while x < len(xs):
-        y = 0
-        x = x + 1
-
+    output += "[],"
+    #x = 1 because empty set is included
+    while x < total:
+        #Selecting only one element per list
+        if numElements == 1:
+            sampleList = [xs[x-1]]
+            output += str(sampleList)
+            if x == len(xs):
+                numElements = numElements + 1
+            else:
+                output += ","
+            x = x + 1
+        #More than 1 element per list
+        else:
+            sampleList
+    output += "]"
     return output
 
-result = powerset()
-print(result)
+#result = powerset()
+#print(result)
 
 def matrix_product(xss, yss):
 
