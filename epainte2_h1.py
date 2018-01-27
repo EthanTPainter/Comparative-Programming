@@ -1,9 +1,13 @@
-#Any imports???
+#Name: Ethan Painter
+#Info: epainte2, G00915079
+
+#No imports
 
 #Given a positive integer n, return list of its prime factors in increasing order.
 #Include correct number of occurrences (i.e. 24 -> [2,2,2,3])step out into the night
 def prime_factors(n):
     #Check if prime factors are successfully printing
+    divisorList = []
     primeNumList = []
     list = []
 
@@ -11,19 +15,42 @@ def prime_factors(n):
     if n < 2:
         return list
 
+    #Check for all known divisors of given number n
+    #Check for prime divisors within list of all divisors
+    #Go through prime divisor list and return multiples of divisors
+    count = 0
+    for i in range(2,n+1):
+        if n % i == 0:
+            #This number is divisible. Add to list
+            divisorList.append(i)
+            count = count + 1
+
+    #Print Debug
+    print("All Divisible Factors: ")
+    x = 0
+    while(x < len(divisorList)):
+        print(divisorList[x])
+        x = x + 1
+
     #Input must be 2 or greater
     #Loop through all possible prime numbers between 2 and n
-    loopCheck = 2
+    count = 0
+    while count < len(divisorList):
+        isPrime = 1
+        innerCount = 2
+        while innerCount <= divisorList[count] and isPrime == 1:
+            if divisorList[count] % innerCount == 0 and divisorList[count] != innerCount:
+                isPrime = 0
+            if innerCount == divisorList[count]:
+                primeNumList.append(innerCount)
+            innerCount = innerCount + 1
+        count = count + 1
 
-    #range from 2(MIN) to n (n+1)
-    for loopCheck in range(2,n+1):
-        #Prime numbers greater than 1
-        if loopCheck > 1:
-            for i in range (2,loopCheck):
-                if(loopCheck % i) == 0:
-                    break
-            else:
-                primeNumList.append(loopCheck)
+    print("All Divisible Prime Factors: ")
+    x = 0
+    while(x < len(primeNumList)):
+        print(primeNumList[x])
+        x = x + 1
 
     #Now check for prime num occurences in
     #primeNumList has all recorded prime numbers between 2 and n
@@ -34,7 +61,6 @@ def prime_factors(n):
             list.append(primeNumList[index])
         else:
             index = index + 1
-
     return list
     #Problems with last test
 
@@ -143,14 +169,68 @@ def cap(x): return 65 <= ord(x) <= 90
 def lengthy(x): return len(x) > 3
 
 #Given a predicate function (f) and a list of values (xs)
-#Answer is
+#Answer is two lists: one holds items that passed the predicate,
+#and the other holds items that didn't pass the predicate
 def pass_fail(f, xs):
+    list_pass = []
+    list_fail = []
+    count = 0
 
-    return 1
+    while count < len(xs):
+        if f(xs[count]):
+            list_pass.append(xs[count])
+        else:
+            list_fail.append(xs[count])
+        count = count + 1
 
+    x = 0
+    y = 0
+    output = "["
+    while x < len(list_pass):
+        if x == len(list_pass)-1:
+            output += str(list_pass[x])
+        else:
+            output += str(list_pass[x]) + ","
+        x = x + 1
+    output += "],["
+    while y < len(list_fail):
+        if y == len(list_fail)-1:
+            output += str(list_fail[y])
+        else:
+            output += str(list_fail[y])+ ","
+        y = y + 1
+    output += "]"
+    return output
+
+#Given a list of values, create the power set
+#Includes the empty set as well
 def powerset(xs):
+    empty_list = []
+    #No numbers in list (Empty)
+    if len(xs) == 0:
+        return str(empty_list)
 
-    return 1
+    #Get Squared number of expected number of sets
+    sampleCount = 0
+    total = 1
+    while sampleCount < len(xs):
+        total = total * 2
+        sampleCount = sampleCount + 1
+
+    print("Sample Count:" + str(total))
+
+    #Assuming numbers exist in the list
+    output = "["
+    x = 0
+    y = 0
+    while x < len(xs):
+        y = 0
+        x = x + 1
+
+    return output
+
+result = powerset()
+print(result)
 
 def matrix_product(xss, yss):
 
