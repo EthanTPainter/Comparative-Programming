@@ -207,18 +207,39 @@ def pass_fail(f, xs):
     return output
 
 #Use to reduce integer to binary solution
-def reduce_to_binary(n):
+#Used to create binary interpretations for power set
+def convert_to_binary(length, n):
     binary = 0
+    binaryList = []
+    #Get square value
+    count = 1
+    sum = 1
+    while count < length:
+        sum = sum * 2
+        count = count + 1
 
-    return binary
+    while length != 0:
+        #Number includes current sum
+        if n >= sum:
+            n = n - sum
+            sum = sum / 2
+            binaryList.append(1)
+        else:
+            sum = sum / 2
+            binaryList.append(0)
+        length = length - 1
+
+    #print(binaryList)
+    return binaryList
 
 #Given a list of values, create the power set
 #Includes the empty set as well
 def powerset(xs):
-    empty_list = []
+    outterList = []
+    outterList.append([])
     #No numbers in list (Empty)
     if len(xs) == 0:
-        return "[" + str(empty_list) + "]"
+        return outterList
 
     #Get Squared number of expected number of sets
     sampleCount = 0
@@ -227,35 +248,54 @@ def powerset(xs):
         total = total * 2
         sampleCount = sampleCount + 1
 
-    #Answer: 2^n
-    print("Sample Count:" + str(total))
-
     #Assuming numbers exist in the list
-    output = "["
     x = 1
-    numElements = 1
-    y = 0
-    output += "[],"
     #x = 1 because empty set is included
     while x < total:
         #Selecting only one element per list
-        if numElements == 1:
-            sampleList = [xs[x-1]]
-            output += str(sampleList)
-            if x == len(xs):
-                numElements = numElements + 1
-            else:
-                output += ","
-            x = x + 1
-        #More than 1 element per list
-        else:
-            sampleList
-    output += "]"
-    return output
-
-#result = powerset()
-#print(result)
+        binaryList = convert_to_binary(len(xs), x)
+        j = 0
+        loopList = []
+        while j < len(xs):
+            #If 1 from binary list, add to loop List
+            if binaryList[j] == 1:
+                loopList.append(xs[j])
+            j = j + 1
+        #Append loopList to power set (overall list) to return
+        outterList.append(loopList)
+        x = x + 1
+    return outterList
 
 def matrix_product(xss, yss):
+    #Check if matrices are compatible
+    #Check if matrix has 1 row (one list)
+    #If xss[0] is an int (and isn't another list)
+    if len(xss) > 1 and isinstance(xss[0],int):
+        xRows = 1
+        xCols = len(xss)
+    else:
+        xRows = len(xss)
+        xCols = len(xss[0])
 
-    return 1
+    if len(yss) > 1 and isinstance(yss[0],int):
+        yRows = 1
+        yCols = len(yss)
+    else:
+        yRows = len(yss)
+        yCols = len(yss[0])
+
+    #Debugging print statement
+    #print("X Rows: " + str(xRows) + "\nX Cols: " + str(xCols) + "\nY Rows: " + str(yRows) + "\nY Cols: " + str(yCols))
+
+    #Solution for when Rows and Cols are both greater than or equal to 2
+    #If xss columns # != yss rows #
+    if xCols != yRows:
+        return None
+
+    #Initialize matrix and loop through all values to multiply and store
+    lastMatrix = [[0 for row in range(yCols)] for col in range(xRows)]
+    for x in range(xRows):
+        for y in range(yCols):
+            for z in range(xCols):
+                lastMatrix[x][y] += xss[x][z] * yss[z][y]
+    return lastMatrix
