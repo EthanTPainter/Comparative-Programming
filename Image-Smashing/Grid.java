@@ -34,6 +34,26 @@ public class Grid<T>{
 
     }
 
+    //Assumes location (i,j) exists in Grid
+    //Sets the location's value to given valu
+    public void set(int i, int j, T value){
 
+    }
+
+    public T remove(int i, int j){
+
+    }
+
+    public Grid<T> transpose(){
+
+    }
+
+    public String toString(){
+
+    }
+
+    public boolean equals(Object other){
+
+    }
 
 }
