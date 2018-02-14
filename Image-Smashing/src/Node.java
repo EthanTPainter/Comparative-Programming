@@ -11,7 +11,7 @@ public class Node{
     public Node bestHop;
     public int cost;
 
-    //Defualt Constructor
+    //Default Constructor
     public Node(){ }
 
     //Constructor creates a Point from row r and column c
@@ -19,6 +19,8 @@ public class Node{
     //Cost indicates the full cost of the cheapest path from this point
     // inclusive to the end
     public Node(int r, int c, Node bestHop, int cost){
-
+        p = new Point(r,c);
+        this.bestHop = bestHop;
+        this.cost = cost;
     }
 }

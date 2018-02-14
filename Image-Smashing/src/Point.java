@@ -5,7 +5,7 @@
  * Last updated: 2/6/2018
  */
 
-//Represents a pair of int alues (x and y)
+//Represents a pair of int values (x and y)
 public class Point{
 
     int x, y;
@@ -36,14 +36,22 @@ public class Point{
     }
 
     //Creates an inverted point (x and y are swapped)
+    //Doesn't affect current point
     public Point invert(){
-        int z;
-        z = x;
-        x = y;
-        y = z;
-        return this
+        Point p = new Point();
+        p.setX(y);
+        p.setY(x);
+        return p;
     }
 
+    //Custom equals method
+    @Override
+    public boolean equals(Object object){
+        return (object instanceof Point) && (((Point) object).getX() == this.getX()) && (((Point) object).getY() == this.getY());
+    }
+
+    //Custom toString method
+    @Override
     public String toString(){
         //Return format: "(3,4)"
         return "(" + x + "," + y + ")";

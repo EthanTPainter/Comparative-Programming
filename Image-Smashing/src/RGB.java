@@ -46,14 +46,16 @@ public class RGB{
 
     //Other is also an instance of RGB
     //Check if they have the same values for r, g, and b.
-    // Return true if all instance varaibles equal
-    public boolean equals(Object other){
-        if(this.getR() == (RGB) other.getR() && this.getG() == (RGB) other.getG() && this.getB() == (RGB) other.getB()){
-            return true;
-        }
-        else{
-            return false;
-        }
+    //Return true if all instance variables equal
+    @Override
+    public boolean equals(Object other) {
+        return (other instanceof RGB) && (this.getR() == ((RGB)other).getR()) && (this.getG() == ((RGB)other).getG()) && (this.getB() == ((RGB)other).getB());
     }
 
+    //toString print format for RGB
+    @Override
+    public String toString()
+    {
+        return "(" + getR() + "," + getG() + "," + getB() + ")";
+    }
 }
