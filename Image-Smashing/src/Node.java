@@ -42,34 +42,78 @@ public class Node{
         }
         col = 0;
         int middleEnergy, leftEnergy, rightEnergy;
-        int summedEnergy;
+        Point leftp, midp, rightp;
+        int leftSumEnergy, midSumEnergy, rightSumEnergy;
         while(row > 0){
             while(col < nodeGrid.width()){
                 //Get middle energy
                 middleEnergy = grid.get(row - 1, col);
+                midSumEnergy = middleEnergy + nodeGrid.get(row, col).cost;
+                midp = new Point(row - 1, col);
                 //Get Left energy
                 if(col == 0){
                     leftEnergy = grid.get(row - 1, grid.width() - 1);
+                    leftSumEnergy = leftEnergy + nodeGrid.get(row, col).cost;
+                    leftp = new Point(row - 1, grid.width()- 1);
                 }
                 else{
                     leftEnergy = grid.get(row - 1, col - 1);
+                    leftSumEnergy = leftEnergy + nodeGrid.get(row, col).cost;
+                    leftp = new Point(row - 1, col - 1);
                 }
                 //Get Right Energy
                 if(col == grid.width() - 1){
                     rightEnergy = grid.get(row - 1, 0);
+                    rightSumEnergy = rightEnergy + nodeGrid.get(row, col).cost;
+                    rightp = new Point(row - 1, 0);
                 }
                 else{
                     rightEnergy = grid.get(row - 1, col + 1);
+                    rightSumEnergy = rightEnergy + nodeGrid.get(row, col).cost;
+                    rightp = new Point(row - 1, col + 1);
                 }
-                int smallest = getSmallestEnergy(leftEnergy, middleEnergy, rightEnergy);
+
+                //Check nodeGrid for empty or comparable amounts
+                //Start with leftEnergy location (null - NOT SET)
+                if(nodeGrid.get(leftp.getX(), leftp.getY()) == null) {
+                    //Set location with current sum energy
+                    nodeGrid.set(leftp.getX(), leftp.getY(), new Node(leftp.getX(), leftp.getY(), null, leftSumEnergy));
+                }
+                //Else leftEnergy Location is not null, check if new amount is less than current amount
+                else{
+                    if(nodeGrid.get(leftp.getX(), leftp.getY()).cost > leftSumEnergy){
+                        nodeGrid.set(leftp.getX(), leftp.getY(), new Node(leftp.getX(), leftp.getY(), null, leftSumEnergy));
+                    }
+                }
+                //Check for middleEnergy location (null - NOT SET)
+                if(nodeGrid.get(midp.getX(), midp.getY()) == null){
+                    //Set location with current sum energy
+                    nodeGrid.set(midp.getX(), midp.getY(), new Node(midp.getX(), midp.getY(), null, midSumEnergy));
+                }
+                else{
+                    if(nodeGrid.get(midp.getX(), midp.getY()).cost > midSumEnergy){
+                        nodeGrid.set(midp.getX(), midp.getY(), new Node(midp.getX(), midp.getY(), null, midSumEnergy));
+                    }
+                }
+                //Check for rightEnergy location (null - NOT SET)
+                if(nodeGrid.get(rightp.getX(), rightp.getY()) == null){
+                    nodeGrid.set(rightp.getX(), rightp.getY(), new Node(rightp.getX(), rightp.getY(), null, rightSumEnergy));
+                }
+                else {
+                    if(nodeGrid.get(rightp.getX(), rightp.getY()).cost > rightSumEnergy){
+                        nodeGrid.set(rightp.getX(), rightp.getY(), new Node(rightp.getX(), rightp.getY(), null, rightSumEnergy));
+                    }
+                }
+                /*
                 summedEnergy = smallest + nodeGrid.get(row, col).cost;
                 nodeGrid.set(row - 1, col, new Node(row - 1, col, null, summedEnergy));
+                */
                 col++;
             }
             col = 0;
             row--;
         }
-        System.out.println("Node Grid: " + nodeGrid);
+        //System.out.println("Node Grid: " + nodeGrid);
         return nodeGrid;
     }
 
@@ -88,8 +132,54 @@ public class Node{
             col++;
         }
         //Given smallestCost, Find path from row 0 and savedCol #
-
-
+        col = savedCol;
+        //Save LEft, Mid, and Right Node references (for clarity)
+        Node leftNode, middleNode, rightNode;
+        //Save energies found at left, mid, and right
+        int leftEnergy, middleEnergy, rightEnergy;
+        //Save leftColumn and rightColumn as they differ from mid
+        int loopLeftColumn, loopRightColumn;
+        while(row < nodeGrid.height()-1){
+            //Get middle energy (energy below current spot)
+            middleNode = nodeGrid.get(row + 1, col);
+            middleEnergy = nodeGrid.get(row + 1, col).cost;
+            //Get Left energy
+            if(col == 0){
+                leftNode = nodeGrid.get(row + 1, nodeGrid.width() - 1);
+                leftEnergy = nodeGrid.get(row + 1, nodeGrid.width() - 1).cost;
+                loopLeftColumn = nodeGrid.width() - 1;
+            }
+            else{
+                leftNode = nodeGrid.get(row + 1, col - 1);
+                leftEnergy = nodeGrid.get(row + 1, col - 1).cost;
+                loopLeftColumn = col - 1;
+            }
+            //Get Right Energy
+            if(col == nodeGrid.width() - 1){
+                rightNode = nodeGrid.get(row + 1, 0);
+                rightEnergy = nodeGrid.get(row + 1, 0).cost;
+                loopRightColumn = 0;
+            }
+            else{
+                rightNode = nodeGrid.get(row + 1, col + 1);
+                rightEnergy = nodeGrid.get(row + 1, col + 1).cost;
+                loopRightColumn = col + 1;
+            }
+            smallestCost = getSmallestEnergy(leftEnergy, middleEnergy, rightEnergy);
+            //Set bestHop for current row + col
+            if(smallestCost == leftEnergy){
+                nodeGrid.get(row, col).bestHop = leftNode;
+                col = loopLeftColumn;
+            }
+            else if(smallestCost == middleEnergy){
+                nodeGrid.get(row, col).bestHop = middleNode;
+            }
+            else{
+                nodeGrid.get(row, col).bestHop = rightNode;
+                col = loopRightColumn;
+            }
+            row++;
+        }
         return nodeGrid;
     }
 

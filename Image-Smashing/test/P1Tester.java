@@ -647,7 +647,6 @@ public class P1Tester {
 
     // ------------------------------------------------------------------------------------------------
 
-
     @Test public void test_removeVerticalPath_1(){
         Grid<RGB> orig = g1();
         List<Point> path = new ArrayList<>(Arrays.asList(new Point[]{new Point(0,0),new Point(1,0),new Point(2,0),new Point(3,0)}));
@@ -719,6 +718,7 @@ public class P1Tester {
         Grid<RGB> expected = new Grid<RGB>(8,3);
         assertEquals(expected, g);
     }
+
     // test our given grids
     @Test public void test_removeVerticalPath_5(){
         Grid<RGB> g = g1();
