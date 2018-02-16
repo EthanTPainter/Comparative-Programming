@@ -508,32 +508,58 @@ public class P1Tester {
   /* energy function is really just a combo usage of energy_at */
 
     @Test public void test_energy_1(){
-        Grid<Integer> ans = new Grid<Integer>(new Integer[][]{{46925, 34525, 39300, 58025, 67950}, {17400, 21000, 17625, 10025, 30825}, {37200, 34000, 39525, 48025, 67725}, {23025, 10400, 20325, 23050, 30325}});
+        Grid<Integer> ans = new Grid<Integer>(new Integer[][]{
+                {46925, 34525, 39300, 58025, 67950},
+                {17400, 21000, 17625, 10025, 30825},
+                {37200, 34000, 39525, 48025, 67725},
+                {23025, 10400, 20325, 23050, 30325}});
         assertEquals (ans, P1.energy(g1()));
     }
 
     @Test public void test_energy_2(){
-        Grid<Integer> ans = new Grid<Integer>(new Integer[][]{{57685, 50893, 91370, 25418, 33055, 37246}, {15421, 56334, 22808, 54796, 11641, 25496}, {12344, 19236, 52030, 17708, 44735, 20663}, {17074, 23678, 30279, 80663, 37831, 45595}, {32337, 30796, 4909, 73334, 40613, 36556}});
+        Grid<Integer> ans = new Grid<Integer>(new Integer[][]{
+                {57685, 50893, 91370, 25418, 33055, 37246},
+                {15421, 56334, 22808, 54796, 11641, 25496},
+                {12344, 19236, 52030, 17708, 44735, 20663},
+                {17074, 23678, 30279, 80663, 37831, 45595},
+                {32337, 30796, 4909, 73334, 40613, 36556}});
         assertEquals (ans, P1.energy(g2()));
     }
 
     @Test public void test_energy_3(){
-        Grid<Integer> ans = new Grid<Integer>(new Integer[][]{{26450, 31250, 30050}, {43150, 43925, 43125}, {18750, 19450, 18875}, {6700, 6150, 6075}, {43025, 44150, 43925}});
+        Grid<Integer> ans = new Grid<Integer>(new Integer[][]{
+                {26450, 31250, 30050},
+                {43150, 43925, 43125},
+                {18750, 19450, 18875},
+                {6700, 6150, 6075},
+                {43025, 44150, 43925}});
         assertEquals (ans, P1.energy(g3()));
     }
 
     @Test public void test_energy_4(){
-        Grid<Integer> ans = new Grid<Integer>(new Integer[][]{{20808, 52020, 20808}, {20808, 52225, 21220}, {20809, 52024, 20809}, {20808, 52225, 21220}});
+        Grid<Integer> ans = new Grid<Integer>(new Integer[][]{
+                {20808, 52020, 20808},
+                {20808, 52225, 21220},
+                {20809, 52024, 20809},
+                {20808, 52225, 21220}});
         assertEquals (ans, P1.energy(g4()));
     }
 
     @Test public void test_energy_5(){
-        Grid<Integer> ans = new Grid<Integer>(new Integer[][]{{0, 1429, 3, 1510, 0, 0}, {29, 3, 3527, 3, 110, 0}, {0, 7729, 3, 7810, 0, 0}, {0, 0, 3500, 0, 0, 0}});
+        Grid<Integer> ans = new Grid<Integer>(new Integer[][]{
+                {0, 1429, 3, 1510, 0, 0},
+                {29, 3, 3527, 3, 110, 0},
+                {0, 7729, 3, 7810, 0, 0},
+                {0, 0, 3500, 0, 0, 0}});
         assertEquals (ans, P1.energy(g5()));
     }
 
     @Test public void test_energy_6(){
-        Grid<Integer> ans = new Grid<Integer>(new Integer[][]{{0, 3, 0, 3, 0, 0}, {0, 0, 6, 0, 6, 0}, {0, 0, 0, 3, 0, 3}, {0, 0, 6, 0, 6, 0}});
+        Grid<Integer> ans = new Grid<Integer>(new Integer[][]{
+                {0, 3, 0, 3, 0, 0},
+                {0, 0, 6, 0, 6, 0},
+                {0, 0, 0, 3, 0, 3},
+                {0, 0, 6, 0, 6, 0}});
         assertEquals (ans, P1.energy(g6()));
     }
 

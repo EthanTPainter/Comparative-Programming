@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.List;
 
 public class P1
@@ -14,7 +15,8 @@ public class P1
 
         Grid<Integer> g = new Grid<Integer>(new Integer[][]{{1,2,3,4},{5,6,7,8},{9,10,11,12}});
 
-        System.out.println(g);
+        P1 another = new P1();
+        System.out.println(another.energy(p1));
     }
 
     //Get Energy at Grid location
@@ -67,7 +69,7 @@ public class P1
         return energy;
     }
 
-    //Generate a grid with
+    //Generate a grid of energies
     public static Grid<Integer> energy(Grid<RGB> grid)
     {
         Grid<Integer> newGrid = new Grid<Integer>(grid.height(), grid.width());
@@ -79,36 +81,89 @@ public class P1
         return newGrid;
     }
 
+    //Find list of points from cheapest path from top to bottom
+    //Tips: Start at the bottom and work your way to the top
+    //Tips: Lowest value at the bottom guarantees Min path found
     public static List<Point> findVerticalPath(Grid<RGB> grid)
     {
+        P1 p = new P1();
+        Grid<Integer> energies = new Grid<>();
+        int row, col = 0;
+        energies = p.energy(grid);
 
-        return null;
+        ArrayList<Point> returnList = new ArrayList<>();
+        ArrayList<Point> currentList = new ArrayList<>();
+        //Go through each bottom node getting total energy for the path
+        //botStart is the starting bottom row node (for each iteration)
+        //Sum is the energies sum generated from current path. optEnergy is optimal energy found thus far
+        int sumEnergy = 0, optEnergy = 0, energyLeft, energyRight;
+        row = energies.height()-1;
+        while(col < energies.width()){
+            while(row > 0){
+                //Get current
+                int energyCurrent = energies.get(row, col);
+                //Get Left
+                if(col == 0){
+                    energyLeft = energies.get(row, energies.width()-1);
+                }
+                else{
+                    energyLeft = energies.get(row, col - 1);
+                }
+                //Get Right
+                if(col == energies.width()-1){
+
+                }
+                else{
+
+                }
+
+                row--;
+            }
+            row = energies.height()-1;
+            col++;
+        }
+        return returnList;
     }
 
+    //Find list of points from cheapest path from left to right
+    //Tips: Use grid transpose method to build it in terms of findVerticalPath definition
     public static List<Point> findHorizontalPath(Grid<RGB> grid)
     {
+        P1 p = new P1();
+        Grid<Integer> energies = new Grid<>();
+        int rows = 0, cols = 0;
+        energies = p.energy(grid);
+        ArrayList<Point> returnList = new ArrayList<>();
 
-        return null;
+        return returnList;
     }
 
+    //Remove each location of the path from the grid
+    //Return a reference to the grid even though it was modified in place
     public static Grid<RGB> removeVerticalPath(Grid<RGB> grid, List<Point> path)
     {
 
         return null;
     }
 
+    //Remove each location of the path from the grid
+    //If a row is empty (all removed), should remove the entire row from the grid
     public static Grid<RGB> removeHorizontalPath(Grid<RGB> grid, List<Point> path)
     {
 
         return null;
     }
 
+    //Open indicated file, assumed to be in PPM P3 format
+    //Read its contents and create and return the grid
     public static Grid<RGB> ppm2grid(String filename)
     {
 
         return null;
     }
 
+    //Correctly store given grid in PPM P3 format in a file with the indicated name
+    //In the current working directory
     public static void grid2ppm(Grid<RGB> grid, String filename)
     {
 
