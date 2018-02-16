@@ -13,10 +13,14 @@ public class P1
                 {new RGB(200,100, 10),new RGB(200,100, 10),new RGB(200,100, 10),new RGB(210,200, 10),new RGB(255,  0, 10)}
         });
 
-        Grid<Integer> g = new Grid<Integer>(new Integer[][]{{1,2,3,4},{5,6,7,8},{9,10,11,12}});
+        Grid<Integer> g = new Grid<Integer>(new Integer[][]{
+                {1,2,3,4},
+                {5,6,7,8},
+                {9,10,11,12}});
 
         P1 another = new P1();
-        System.out.println(another.findVerticalPath(p1));
+        Node again = new Node();
+        Grid<Node> gn = again.setNodeGrid(g);
     }
 
     //Get Energy at Grid location
