@@ -16,7 +16,7 @@ public class P1
         Grid<Integer> g = new Grid<Integer>(new Integer[][]{{1,2,3,4},{5,6,7,8},{9,10,11,12}});
 
         P1 another = new P1();
-        System.out.println(another.energy(p1));
+        System.out.println(another.findVerticalPath(p1));
     }
 
     //Get Energy at Grid location
@@ -90,39 +90,114 @@ public class P1
         Grid<Integer> energies = new Grid<>();
         int row, col = 0;
         energies = p.energy(grid);
-
-        ArrayList<Point> returnList = new ArrayList<>();
-        ArrayList<Point> currentList = new ArrayList<>();
-        //Go through each bottom node getting total energy for the path
-        //botStart is the starting bottom row node (for each iteration)
-        //Sum is the energies sum generated from current path. optEnergy is optimal energy found thus far
-        int sumEnergy = 0, optEnergy = 0, energyLeft, energyRight;
+        ArrayList<Point> optList = new ArrayList<>();
+        ArrayList<Point> loopList = new ArrayList<>();
+        //SavedEnergy is the energies sum generated from current path. optEnergy is optimal energy found thus far
+        int loopEnergy = 0, optimalEnergy = 0, energyLeft, energyRight, energyMiddle;
+        //Loop Column Left, Middle, and Right are for getting the Next Energies from Left, Middle, and Right points
+        int loopColumnLeft = 0, loopColumnMiddle = 0, loopColumnRight = 0;
+        //Loop Column is for setting the new loop column (may differentiate from column in loop)
+        int loopColumn = 0;
         row = energies.height()-1;
         while(col < energies.width()){
-            while(row > 0){
-                //Get current
-                int energyCurrent = energies.get(row, col);
-                //Get Left
-                if(col == 0){
-                    energyLeft = energies.get(row, energies.width()-1);
+            while(row >= 0) {
+                //If row is bottom row (Bottom to top), then grab first element and increment row
+                //If grabbing first element of the bottom row
+                if(row == energies.height()-1){
+                    loopEnergy = energies.get(row, col);
+                    loopList.add(new Point(row, col));
+                    row--;
+                    energyMiddle = energies.get(row, col);
                 }
                 else{
-                    energyLeft = energies.get(row, col - 1);
+                    //Get Middle/current node energy from previous loop
+                    energyMiddle = energies.get(row, loopColumn);
+                    loopColumnMiddle = loopColumn;
                 }
-                //Get Right
-                if(col == energies.width()-1){
-
+                //Get Left node energy
+                if (loopColumn == 0) {
+                    energyLeft = energies.get(row, energies.width() - 1);
+                    loopColumnLeft = energies.width()-1;
+                } else {
+                    energyLeft = energies.get(row, loopColumn - 1);
+                    loopColumnLeft = loopColumn - 1;
                 }
-                else{
-
+                //Get Right node energy
+                if (loopColumn == energies.width() - 1) {
+                    energyRight = energies.get(row, 0);
+                    loopColumnRight = 0;
+                } else {
+                    energyRight = energies.get(row, loopColumn + 1);
+                    loopColumnRight = loopColumn + 1;
                 }
 
+                //Compare the energies to determine which node should be selected
+                //Select Left if left is less than middle and right
+                if (energyLeft <= energyMiddle){
+                    if (energyLeft <= energyRight) {
+                        //Set energyLeft as new node to branch off from
+                        loopList.add(0,new Point(row, loopColumnLeft));
+                        loopColumn = loopColumnLeft;
+                        loopEnergy += energyLeft;
+                    }
+                }
+                //Select Middle if middle is less than left and right
+                if(energyMiddle < energyLeft){
+                    if(energyMiddle <= energyRight){
+                        //Set energyMiddle as new node to branch off from
+                        loopList.add(0,new Point(row, loopColumnMiddle));
+                        loopColumn = loopColumnMiddle;
+                        loopEnergy += energyMiddle;
+                    }
+                }
+                //Select right if right is less than left and middle
+                if(energyRight < energyLeft){
+                    if(energyRight < energyMiddle){
+                        //Set energyRight as new node to branch off from
+                        loopList.add(0, new Point(row, loopColumnRight));
+                        loopColumn = loopColumnRight;
+                        loopEnergy += energyRight;
+                    }
+                }
+                //Check for equals
+                //Decrement row
                 row--;
             }
+            System.out.println("loopList: " + loopList.toString() + ", optList: " + optList.toString());
+            //Reset row and add 1 to column
             row = energies.height()-1;
             col++;
+            loopColumn = col;
+            //If optimal energy not set, set to loop energy
+            //Set optimal List as loop list
+            if(optimalEnergy == 0){
+                optimalEnergy = loopEnergy;
+                //Add all values in loop List to optList
+                int i = 0;
+                while(i < loopList.size()){
+                    optList.add(i,loopList.get(i));
+                    i++;
+                }
+                loopList.clear();
+            }
+            //If optimal energy and optimal list set, compare to loop energy and list
+            else if(loopEnergy < optimalEnergy){
+                //Remove current values in optList and add all values in loop List to optList
+                optList.clear();
+                int i = 0;
+                while(i < loopList.size()){
+                    optList.add(i,loopList.get(i));
+                    i++;
+                }
+                loopList.clear();
+            }
+            //If loop energy is greater reset the loop Energy and list
+            else{
+                loopList.clear();
+                loopEnergy = 0;
+            }
         }
-        return returnList;
+        return optList;
     }
 
     //Find list of points from cheapest path from left to right
