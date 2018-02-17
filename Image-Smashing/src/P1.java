@@ -29,8 +29,8 @@ public class P1
         P1 another = new P1();
         Node again = new Node();
         Grid<Node> gn = again.setNodeGrid(ans);
-        gn = again.setBestHop(gn);
-        another.findVerticalPath(p1);
+        //gn = again.setBestHop(gn);
+        //another.findVerticalPath(p1);
     }
 
     //Get Energy at Grid location

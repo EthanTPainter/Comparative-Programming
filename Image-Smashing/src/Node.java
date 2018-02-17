@@ -27,31 +27,10 @@ public class Node{
         this.cost = cost;
     }
 
-    //TEST
-    //Exhaustive Search (Reliable but inefficient)
-    public List<Point> findMinPath(Grid<Integer> grid){
-        ArrayList<Point> returnList = new ArrayList<>();
-        ArrayList<Point> currentMinList = new ArrayList<>();
-        int row = grid.height()-1, col = 0, counter = 0;
-        int loopRow, loopCol, sum, finalSum;
-        while(counter < 1){
-            //Set up the tree
-            ArrayList<Integer> nodes = new ArrayList<Integer>();
-            //replace 0 with col
-            nodes.add(row, col);
-            while(row != -1){
-                ArrayList<Integer> nodes2 = new ArrayList<>();
-
-            }
-            counter++;
-        }
-
-        return returnList;
-    }
-
     //Given a Grid of Integer values
     //Create a grid of nodes with set bestHop and costs for each node
     //Follows a bottom-up structure
+    //SUMS OF ENERGIES DO NOT WRAP AROUND GRID
     public Grid<Node> setNodeGrid(Grid<Integer> grid){
         Grid<Node> nodeGrid = new Grid<>(grid.height(), grid.width());
         int row, col;
@@ -100,13 +79,15 @@ public class Node{
 
                 //Check nodeGrid for empty or comparable amounts
                 //Start with leftEnergy location (null - NOT SET)
-                if(nodeGrid.get(leftp.getX(), leftp.getY()) == null) {
+                //IF COL == 0 CANT SET LEFT ENERGY GRID LOCATION (NO WRAPPING)
+                if(nodeGrid.get(leftp.getX(), leftp.getY()) == null && col != 0) {
                     //Set location with current sum energy
                     nodeGrid.set(leftp.getX(), leftp.getY(), new Node(leftp.getX(), leftp.getY(), null, leftSumEnergy));
                 }
                 //Else leftEnergy Location is not null, check if new amount is less than current amount
                 else{
-                    if(nodeGrid.get(leftp.getX(), leftp.getY()).cost > leftSumEnergy){
+                    //IF COL == 0 CANT SET LEFT ENERGY GRID LOCATION (NO WRAPPING)
+                    if(nodeGrid.get(leftp.getX(), leftp.getY()) != null && nodeGrid.get(leftp.getX(), leftp.getY()).cost > leftSumEnergy && col != 0){
                         nodeGrid.set(leftp.getX(), leftp.getY(), new Node(leftp.getX(), leftp.getY(), null, leftSumEnergy));
                     }
                 }
@@ -121,11 +102,13 @@ public class Node{
                     }
                 }
                 //Check for rightEnergy location (null - NOT SET)
-                if(nodeGrid.get(rightp.getX(), rightp.getY()) == null){
+                //IF COL == grid.width()-1 CANT SET LEFT ENERGY GRID LOCATION (NO WRAPPING)
+                if(nodeGrid.get(rightp.getX(), rightp.getY()) == null && col != grid.width()-1){
                     nodeGrid.set(rightp.getX(), rightp.getY(), new Node(rightp.getX(), rightp.getY(), null, rightSumEnergy));
                 }
                 else {
-                    if(nodeGrid.get(rightp.getX(), rightp.getY()).cost > rightSumEnergy){
+                    //IF COL == grid.width()-1 CANT SET LEFT ENERGY GRID LOCATION (NO WRAPPING)
+                    if(nodeGrid.get(rightp.getX(), rightp.getY()) != null && nodeGrid.get(rightp.getX(), rightp.getY()).cost > rightSumEnergy && col != grid.width()-1){
                         nodeGrid.set(rightp.getX(), rightp.getY(), new Node(rightp.getX(), rightp.getY(), null, rightSumEnergy));
                     }
                 }
@@ -154,7 +137,7 @@ public class Node{
         }
         //Given smallestCost, Find path from row 0 and savedCol #
         col = savedCol;
-        //Save LEft, Mid, and Right Node references (for clarity)
+        //Save Left, Mid, and Right Node references (for clarity)
         Node leftNode, middleNode, rightNode;
         //Save energies found at left, mid, and right
         int leftEnergy, middleEnergy, rightEnergy;
