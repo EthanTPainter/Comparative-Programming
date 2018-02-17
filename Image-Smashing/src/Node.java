@@ -150,7 +150,8 @@ public class Node{
             //Get Left energy
             if(col == 0){
                 leftNode = nodeGrid.get(row + 1, nodeGrid.width() - 1);
-                leftEnergy = nodeGrid.get(row + 1, nodeGrid.width() - 1).cost;
+                //leftEnergy = nodeGrid.get(row + 1, nodeGrid.width() - 1).cost;
+                leftEnergy = 1000000;      //Set leftEnergy to a ridiculous amount because it should be unreachable
                 loopLeftColumn = nodeGrid.width() - 1;
             }
             else{
@@ -161,7 +162,8 @@ public class Node{
             //Get Right Energy
             if(col == nodeGrid.width() - 1){
                 rightNode = nodeGrid.get(row + 1, 0);
-                rightEnergy = nodeGrid.get(row + 1, 0).cost;
+                //rightEnergy = nodeGrid.get(row + 1, 0).cost;
+                rightEnergy = 1000000;      //Set rightEnergy to a ridiculous amount because it should be unreachable
                 loopRightColumn = 0;
             }
             else{

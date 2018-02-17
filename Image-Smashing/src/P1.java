@@ -14,6 +14,60 @@ public class P1
                 {new RGB(200,100, 10),new RGB(200,100, 10),new RGB(200,100, 10),new RGB(210,200, 10),new RGB(255,  0, 10)}
         });
 
+        Grid<RGB> g1 = new Grid<RGB>(new RGB[][]{
+                {new RGB(100, 75,200),new RGB(100,100,200),new RGB(100,100,200),new RGB(100,100,200),new RGB(200,125,200)},
+                {new RGB(150, 30,180),new RGB(150, 50,180),new RGB(100,120,180),new RGB(100,120,180),new RGB(100,120,180)},
+                {new RGB(100, 75,100),new RGB(100, 80,100),new RGB(100, 85,100),new RGB(100, 95,100),new RGB(100,110,100)},
+                {new RGB(200,100, 10),new RGB(200,100, 10),new RGB(200,100, 10),new RGB(210,200, 10),new RGB(255,  0, 10)}
+        });
+
+        Grid<RGB> g2 = new Grid<RGB>(new RGB[][]{
+                {new RGB( 78, 209,  79), new RGB( 63, 118, 247), new RGB( 92, 175,  95), new RGB(243,  73, 183), new RGB(210, 109, 104), new RGB(252, 101, 119)},
+                {new RGB(224, 191, 182), new RGB(108,  89,  82), new RGB( 80, 196, 230), new RGB(112, 156, 180), new RGB(176, 178, 120), new RGB(142, 151, 142)},
+                {new RGB(117, 189, 149), new RGB(171 ,231, 153), new RGB(149, 164, 168), new RGB(107, 119,  71), new RGB(120, 105, 138), new RGB(163, 174, 196)},
+                {new RGB(163, 222, 132), new RGB(187 ,117, 183), new RGB( 92, 145,  69), new RGB(158, 143,  79), new RGB(220,  75, 222), new RGB(189,  73, 214)},
+                {new RGB(211, 120, 173), new RGB(188 ,218, 244), new RGB(214, 103,  68), new RGB(163, 166, 246), new RGB( 79, 125, 246), new RGB(211, 201,  98)}
+        });
+
+        Grid<RGB> g3 = new Grid<RGB>(new RGB[][]{
+                {new RGB(  0, 100, 200), new RGB(  0,  80, 200), new RGB(  0, 100, 200)},
+                {new RGB(100,  25, 200), new RGB(100,  15, 200), new RGB(100,  25, 200)},
+                {new RGB(200,  95, 255), new RGB(200, 110, 255), new RGB(200, 100, 255)},
+                {new RGB(200, 100, 255), new RGB(200,  95, 255), new RGB(200, 100, 255)},
+                {new RGB(255,  70, 200), new RGB(255, 100, 200), new RGB(255, 100, 200)}
+        });
+
+        Grid<RGB> g4 = new Grid<RGB>(new RGB[][]{
+                {new RGB(255, 101, 51), new RGB(255, 101, 153), new RGB(255, 101, 255)},
+                {new RGB(255, 153, 51), new RGB(255, 153, 153), new RGB(255, 153, 255)},
+                {new RGB(255, 203, 51), new RGB(255, 204, 153), new RGB(255, 205, 255)},
+                {new RGB(255, 255, 51), new RGB(255, 255, 153), new RGB(255, 255, 255)}
+        });
+
+        // position new RGB(1,2) is interesting I guess.
+        Grid<RGB> g5 = new Grid<RGB>(new RGB[][]{
+                {new RGB(0,0,0),new RGB(0,0,0),new RGB(10,20,30),new RGB(0,0,0),new RGB(0,0,0),new RGB(0,0,0)},
+                {new RGB(0,0,0),new RGB(2,3,4),new RGB( 1, 1, 1),new RGB(5,6,7),new RGB(0,0,0),new RGB(0,0,0)},
+                {new RGB(0,0,0),new RGB(0,0,0),new RGB(60,50,40),new RGB(0,0,0),new RGB(0,0,0),new RGB(0,0,0)},
+                {new RGB(0,0,0),new RGB(0,0,0),new RGB( 0, 0, 0),new RGB(0,0,0),new RGB(0,0,0),new RGB(0,0,0)}
+        });
+
+        // the new RGB(1,1,1) nodes comprise the best vertical path to remove.
+        Grid<RGB> g6 = new Grid<RGB>(new RGB[][]{
+                {new RGB(0,0,0),new RGB(0,0,0),new RGB(1,1,1),new RGB(0,0,0),new RGB(0,0,0),new RGB(0,0,0)},
+                {new RGB(0,0,0),new RGB(0,0,0),new RGB(0,0,0),new RGB(1,1,1),new RGB(0,0,0),new RGB(0,0,0)},
+                {new RGB(0,0,0),new RGB(0,0,0),new RGB(0,0,0),new RGB(0,0,0),new RGB(1,1,1),new RGB(0,0,0)},
+                {new RGB(0,0,0),new RGB(0,0,0),new RGB(0,0,0),new RGB(1,1,1),new RGB(0,0,0),new RGB(0,0,0)}
+        });
+
+        // the new RGB(1,1,1) nodes comprise the best horizontal path to remove.
+       Grid<RGB> g7 = new Grid<RGB>(new RGB[][]{
+                {new RGB(1,1,1),new RGB(0,0,0),new RGB(0,0,0),new RGB(0,0,0),new RGB(0,0,0),new RGB(0,0,0)},
+                {new RGB(0,0,0),new RGB(1,1,1),new RGB(0,0,0),new RGB(1,1,1),new RGB(0,0,0),new RGB(0,0,0)},
+                {new RGB(1,1,1),new RGB(0,0,0),new RGB(1,1,1),new RGB(0,0,0),new RGB(1,1,1),new RGB(0,0,0)},
+                {new RGB(0,0,0),new RGB(0,0,0),new RGB(0,0,0),new RGB(0,0,0),new RGB(0,0,0),new RGB(1,1,1)}
+        });
+
         Grid<Integer> g = new Grid<Integer>(new Integer[][]{
                 {1,2,3,4},
                 {5,6,7,8},
@@ -29,8 +83,8 @@ public class P1
         P1 another = new P1();
         Node again = new Node();
         Grid<Node> gn = again.setNodeGrid(ans);
-        //gn = again.setBestHop(gn);
-        //another.findVerticalPath(p1);
+        gn = again.setBestHop(gn);
+        another.findVerticalPath(g6);
     }
 
     //Get Energy at Grid location
@@ -101,16 +155,16 @@ public class P1
     {
         P1 p = new P1();
         Grid<Integer> energies;
-        int row = 0, col = 0;
+        int col = 0;
         energies = p.energy(grid);
         ArrayList<Point> optList = new ArrayList<>();
 
+        //Create node and setNodeGrid with node path
         Node n1 = new Node();
         Grid<Node> gn = n1.setNodeGrid(energies);
         gn = n1.setBestHop(gn);
-        System.out.println("Node Grid:" + gn);
 
-        //Build up the list to return
+        //Follow node path created
         //ASSUMING: We have at least one node.bestHop set (not null) in the first row
         boolean found = false;
         while(found == false){
@@ -122,53 +176,14 @@ public class P1
                 col++;
             }
         }
-        //Add first point to list
-        optList.add(n1.p);
-
-        //Save energies found at left, mid, and right
-        int leftEnergy, middleEnergy, rightEnergy, smallestCost;
-        //Save leftColumn and rightColumn as they differ from mid
-        int loopLeftColumn, loopRightColumn;
-        while(row < energies.height() - 1){
-            //Get middle energy (energy below current spot)
-            middleEnergy = energies.get(row + 1, col);
-            //Get Left energy
-            if(col == 0){
-                leftEnergy = energies.get(row + 1, gn.width() - 1);
-                loopLeftColumn = gn.width() - 1;
-            }
-            else{
-                leftEnergy = energies.get(row + 1, col - 1);
-                loopLeftColumn = col - 1;
-            }
-            //Get Right Energy
-            if(col == gn.width() - 1){
-                rightEnergy = energies.get(row + 1,0);
-                loopRightColumn = 0;
-            }
-            else{
-                rightEnergy = energies.get(row + 1, col + 1);
-                loopRightColumn = col + 1;
-            }
-            smallestCost = n1.getSmallestEnergy(leftEnergy, middleEnergy, rightEnergy);
-            //Set bestHop for current row + col
-            if(smallestCost == leftEnergy){
-                optList.add(new Point(row + 1, loopLeftColumn));
-                //nodeGrid.get(row, col).bestHop = leftNode;
-                col = loopLeftColumn;
-            }
-            else if(smallestCost == middleEnergy){
-                optList.add(new Point(row + 1, col));
-                //nodeGrid.get(row, col).bestHop = middleNode;
-            }
-            else{
-                optList.add(new Point(row + 1, loopRightColumn));
-                //nodeGrid.get(row, col).bestHop = rightNode;
-                col = loopRightColumn;
-            }
-            row++;
+        //Loop through nodes until we reach the bottom
+        while(n1.bestHop != null){
+            optList.add(n1.p);
+            n1 = n1.bestHop;
         }
-        System.out.println("OptList: " + optList);
+        //Add last node to the end because it's the node on the bottom row
+        optList.add(n1.p);
+        System.out.println("Path: " + optList);
         return optList;
     }
 
@@ -178,19 +193,69 @@ public class P1
     {
         P1 p = new P1();
         Grid<Integer> energies = new Grid<>();
-        int rows = 0, cols = 0;
+        int col = 0;
         energies = p.energy(grid);
-        ArrayList<Point> returnList = new ArrayList<>();
+        ArrayList<Point> optList = new ArrayList<>();
 
-        return returnList;
+        int newHeight = energies.width();
+        int newWidth = energies.height();
+        //Transpose energy grid
+        energies = energies.transpose();
+        //Set height and width
+        energies.width = newWidth;
+        energies.height = newHeight;
+        System.out.println("Trans: " + energies);
+
+        //Create node and setNodeGrid with node path
+        Node n1 = new Node();
+        Grid<Node> gn = n1.setNodeGrid(energies);
+        System.out.println("Pre Node Grid: " + gn);
+        gn = n1.setBestHop(gn);
+        System.out.println("Node Grid: " + gn);
+        //Follow node path created
+        //ASSUMING: We have at least one node.bestHop set (not null) in the first row
+        boolean found = false;
+        while(found == false){
+            if(gn.get(0, col).bestHop !=  null){
+                n1 = gn.get(0, col);
+                found = true;
+            }
+            else{
+                col++;
+            }
+        }
+        //Loop through nodes until we reach the bottom
+        while(n1.bestHop != null){
+            //Inverse the points from (X,Y) -> (Y,X) because the grid was transposed
+            optList.add(new Point(n1.p.getY(), n1.p.getX()));
+            n1 = n1.bestHop;
+        }
+        //Add last node to the end because it's the node on the bottom row
+        //Remember to swap (X,Y) -> (Y,X) for this one too
+        optList.add(new Point(n1.p.getY(), n1.p.getX()));
+        System.out.println("Path: " + optList);
+        return optList;
     }
 
     //Remove each location of the path from the grid
     //Return a reference to the grid even though it was modified in place
     public static Grid<RGB> removeVerticalPath(Grid<RGB> grid, List<Point> path)
     {
-
-        return null;
+        //Assuming list goes from (0,0), (0,1), (0,2) ... in that order
+        //This means we can work from back of the list to the front because each removal changes indexing (ArrayList)
+        System.out.println("Grid: " + grid);
+        System.out.println("length: " + path.size());
+        System.out.println("Path: " + path);
+        int count = path.size()-1;
+        while(count != -1){
+            int xVal = path.get(count).getX();
+            int yVal = path.get(count).getY();
+            grid.remove(xVal,yVal);
+            count--;
+        }
+        System.out.println("Grid Height: " + grid.height());
+        System.out.println("Grid Width:  " + grid.width());
+        return grid;
     }
 
     //Remove each location of the path from the grid
