@@ -5,6 +5,9 @@
  * Last updated: 2/6/2018
  */
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Node{
 
     public Point p;
@@ -22,6 +25,28 @@ public class Node{
         p = new Point(r,c);
         this.bestHop = bestHop;
         this.cost = cost;
+    }
+
+    //TEST
+    //Exhaustive Search (Reliable but inefficient)
+    public List<Point> findMinPath(Grid<Integer> grid){
+        ArrayList<Point> returnList = new ArrayList<>();
+        ArrayList<Point> currentMinList = new ArrayList<>();
+        int row = grid.height()-1, col = 0, counter = 0;
+        int loopRow, loopCol, sum, finalSum;
+        while(counter < 1){
+            //Set up the tree
+            ArrayList<Integer> nodes = new ArrayList<Integer>();
+            //replace 0 with col
+            nodes.add(row, col);
+            while(row != -1){
+                ArrayList<Integer> nodes2 = new ArrayList<>();
+
+            }
+            counter++;
+        }
+
+        return returnList;
     }
 
     //Given a Grid of Integer values
@@ -104,10 +129,6 @@ public class Node{
                         nodeGrid.set(rightp.getX(), rightp.getY(), new Node(rightp.getX(), rightp.getY(), null, rightSumEnergy));
                     }
                 }
-                /*
-                summedEnergy = smallest + nodeGrid.get(row, col).cost;
-                nodeGrid.set(row - 1, col, new Node(row - 1, col, null, summedEnergy));
-                */
                 col++;
             }
             col = 0;
