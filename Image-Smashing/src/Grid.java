@@ -114,6 +114,8 @@ public class Grid<T>{
                 a.add(this.get(col, row));
             }
         }
+        grid.height = newHeight;
+        grid.width = newWidth;
         //return grid
         return grid;
     }
