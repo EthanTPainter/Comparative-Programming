@@ -220,3 +220,9 @@ gridToFile :: Grid RGB -> FilePath -> IO ()
 
 fileToGrid :: FilePath -> IO (Grid RGB)
 -}
+
+{-Secondary Author Note:
+   Name: Ethan Painter
+   G#:   G00915079
+   netID: epainte2
+-}
