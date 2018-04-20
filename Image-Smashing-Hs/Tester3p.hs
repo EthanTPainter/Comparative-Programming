@@ -17,7 +17,7 @@ Be sure to :reload between calls!
 
 -}
 
-module Tester3 where
+module Tester3p where
 
 import Project3(width,height,
                 energyAt,energies,
@@ -123,7 +123,6 @@ test_buildNodeFromPacket = TestList $ [
   tc "buildNodeFromPacket6" (Node (0,1) (RGB 2 3 4) 5 6 endNode1 (endNode3,endNode1,endNode2)) $ buildNodeFromPacket ((0,1),RGB 2 3 4, 5) (endNode3,endNode1,endNode2),
   tc "buildNodeFromPacket7" (Node (0,1) (RGB 2 3 4) 5 6 endNode1 (endNode1,endNode1,endNode1)) $ buildNodeFromPacket ((0,1),RGB 2 3 4, 5) (endNode1, endNode1, endNode1)
   ]
-
 
 endNode1 = Node (1,1) (RGB 1 1 1) 1 1 No (No,No,No)
 endNode2 = Node (2,2) (RGB 2 2 2) 2 2 No (No,No,No)
