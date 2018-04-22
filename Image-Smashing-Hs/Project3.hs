@@ -44,7 +44,7 @@ g1 = G [
   [ RGB 100  75 100,  RGB 100  80 100,  RGB 100  85 100,  RGB 100  95 100,  RGB 100 110 100],
   [ RGB 200 100  10,  RGB 200 100  10,  RGB 200 100  10,  RGB 210 200  10,  RGB 255   0  10]]
 
-g5 = G [
+g5 = [
   [ RGB 0 0 0,  RGB 0 0 0,  RGB 10 20 30,  RGB 0 0 0,  RGB 0 0 0,  RGB 0 0 0] ,
   [ RGB 0 0 0,  RGB 2 3 4,  RGB  1  1  1,  RGB 5 6 7,  RGB 0 0 0,  RGB 0 0 0] ,
   [ RGB 0 0 0,  RGB 0 0 0,  RGB 60 50 40,  RGB 0 0 0,  RGB 0 0 0,  RGB 0 0 0] ,
@@ -56,6 +56,7 @@ x1 = RGB 100 75 200
 x2 = [RGB 100 75 200, RGB 100 100 200, RGB 100 100 200, RGB 100 100 200, RGB 200 125 200]
 endNode1 = Node (1,1) (RGB 1 1 1) 1 1 No (No,No,No)
 g1packets = G [[((0,0),RGB 100 75 200,46925),((0,1),RGB 100 100 200,34525),((0,2),RGB 100 100 200,39300),((0,3),RGB 100 100 200,58025),((0,4),RGB 200 125 200,67950)],[((1,0),RGB 150 30 180,17400),((1,1),RGB 150 50 180,21000),((1,2),RGB 100 120 180,17625),((1,3),RGB 100 120 180,10025),((1,4),RGB 100 120 180,30825)],[((2,0),RGB 100 75 100,37200),((2,1),RGB 100 80 100,34000),((2,2),RGB 100 85 100,39525),((2,3),RGB 100 95 100,48025),((2,4),RGB 100 110 100,67725)],[((3,0),RGB 200 100 10,23025),((3,1),RGB 200 100 10,10400),((3,2),RGB 200 100 10,20325),((3,3),RGB 210 200 10,23050),((3,4),RGB 255 0 10,30325)]]
+g1packs = [[((0,0),RGB 100 75 200,46925),((0,1),RGB 100 100 200,34525),((0,2),RGB 100 100 200,39300),((0,3),RGB 100 100 200,58025),((0,4),RGB 200 125 200,67950)],[((1,0),RGB 150 30 180,17400),((1,1),RGB 150 50 180,21000),((1,2),RGB 100 120 180,17625),((1,3),RGB 100 120 180,10025),((1,4),RGB 100 120 180,30825)],[((2,0),RGB 100 75 100,37200),((2,1),RGB 100 80 100,34000),((2,2),RGB 100 85 100,39525),((2,3),RGB 100 95 100,48025),((2,4),RGB 100 110 100,67725)],[((3,0),RGB 200 100 10,23025),((3,1),RGB 200 100 10,10400),((3,2),RGB 200 100 10,20325),((3,3),RGB 210 200 10,23050),((3,4),RGB 255 0 10,30325)]]
 --END TESTING
 
 --Main
@@ -254,6 +255,8 @@ calcGridEnergies (G rgb) startColIdx endColIdx =
 energies :: Grid RGB -> Grid NodeEnergy
 energies (G rgb) = G (calcGridEnergies (G rgb) 0 (height (G rgb)))
 
+noGEnergies :: Grid RGB -> [[NodeEnergy]]
+noGEnergies (G rgb) = (calcGridEnergies (G rgb) 0 (height (G rgb)))
 --Main
 --Create Triplets
 nextGroups :: [a] -> a -> [(a,a,a)]
@@ -335,8 +338,8 @@ buildNodeFromPacket (cords, rgb, nodeEnergy) (n1, n2, n3) =
          --Node 2 and Node 3 must not be 'No'
          then Node cords rgb nodeEnergy (nodeEnergy + getNodeMinEn n2 n3) (getNodeMin n2 n3) (n1,n2,n3)
          else if n3 == No
-         then Node cords rgb nodeEnergy (nodeEnergy + getNodeMinEn n1 n2) (getNodeMin n1 n2) (n1,n2,n3)
-         else Node cords rgb nodeEnergy (nodeEnergy + getNodeMinEnThree n1 n2 n3) (getNodeMinThree n1 n2 n3) (n1,n2,n3)
+              then Node cords rgb nodeEnergy (nodeEnergy + getNodeMinEn n1 n2) (getNodeMin n1 n2) (n1,n2,n3)
+              else Node cords rgb nodeEnergy (nodeEnergy + getNodeMinEnThree n1 n2 n3) (getNodeMinThree n1 n2 n3) (n1,n2,n3)
 
 --Main
 --Build Row From Packets
@@ -344,7 +347,6 @@ buildRowFromPackets :: [Packet] -> [(Node,Node,Node)] -> [Node]
 buildRowFromPackets [] [] = []
 buildRowFromPackets (p:ps) (n:ns) = buildNodeFromPacket p (getFirstNode n,getSecondNode n,getThirdNode n)
                                     : buildRowFromPackets ps ns
-
 --Helper
 --Get first node
 getFirstNode :: (Node,Node,Node) -> Node
@@ -362,10 +364,10 @@ getThirdNode (n1,n2,n3) = n3
 
 --Helper
 --Build Packets into Nodes
-helpPacketsToNodes :: Grid Packet -> [Node] -> [[Node]]
+helpPacketsToNodes :: Grid Packet -> [(Node,Node,Node)] -> [[Node]]
 helpPacketsToNodes (G []) _ = []
---Number of Nodes matters here. Must change
-helpPacketsToNodes (G (p:ps)) nodeList = buildRowFromPackets p (nextGroups nodeList No) : helpPacketsToNodes (G ps) (buildRowFromPackets p (nextGroups nodeList No))
+helpPacketsToNodes (G p) nodeTriples =
+    buildRowFromPackets (head p) nodeTriples :  helpPacketsToNodes (G (tail p)) (nextGroups (buildRowFromPackets (head p) nodeTriples) No)
 
 --Helper
 --Generate "No" Nodes in triplets for bottom row of packets
@@ -377,21 +379,139 @@ generateNoNodes startIdx endIdx =
 
 --Main
 --Packets To Nodes
+--Reverse function allowed from M. Snyder
 packetsToNodes :: Grid Packet -> Grid Node
-packetsToNodes (G pack) = G (helpPacketsToNodes (G pack) (generateNoNodes 0 (width (G pack))))
+packetsToNodes (G pack) = G (reverse (helpPacketsToNodes (G (reverse pack)) (nextGroups (generateNoNodes 0 (length (head pack))) No)))
+
+--Helper
+--Make Minimum sum value from given values
+--Given val, bot left, bot mid, bot right
+makeMinSum :: Int -> Int -> Int -> Int -> Int -> Int
+makeMinSum given x y z rowLen =
+    if rowLen == 0
+    then if y <= z
+         then getDuoMin y z
+         else if rowLen == (rowLen - 1)
+              then getDuoMin x y
+              else if x <= y && x <= z
+                   then given + x
+                   else if y <= z
+                        then given + y
+                        else given + z
+                        --This line below doesn't matter
+                        else 0
+--Helper
+--Get Min from two values
+getDuoMin :: Int -> Int -> Int
+getDuoMin v1 v2 =
+    if v1 <= v2
+    then v1
+    else v2
+
+--Helper
+--200,000 is the max (Spot no available)
+getBotLeft :: [Int] -> Int -> Int
+getBotLeft oldRow x =
+    if x == 0
+    then -1
+    else oldRow !! (x-1)
+
+--200,000 max if spot not available
+getBotRight :: [Int] -> Int -> Int
+getBotRight oldRow x =
+    if x == (length oldRow)-1
+    then -1
+    else oldRow !! (x+1)
+
+--Helper
+--Get new sum for rows
+--Grid RGBs, Int row, Int current index
+makeMinRow :: [Int] -> Int -> [Int] -> [Int]
+makeMinRow newRow curIdx oldRow =
+    if curIdx == (length newRow)
+    then []
+    else makeMinSum (newRow !! curIdx) (getBotLeft oldRow curIdx) (oldRow !! curIdx) (getBotRight oldRow curIdx) (length oldRow) : makeMinRow newRow (curIdx + 1) oldRow
+
+--Helper
+--REVERSE [[INT]] in FUNCTION CALL
+makeMinGrid :: [[Int]] -> Int -> [Int] -> [[Int]]
+makeMinGrid [] startColIdx olds = []
+makeMinGrid new startColIdx olds =
+    if startColIdx == 0
+    then (head new) : makeMinGrid (tail new) (startColIdx + 1) (head new)
+    else makeMinRow (head new) 0 olds : makeMinGrid (tail new) (startColIdx + 1) (makeMinRow (head new) 0 olds)
+
+--Helper
+--Find lowest Top Node given a Grid Int, and current lowest node
+--Set current low to -1
+getLowestTop :: [Int] -> Int -> Int -> Coord -> Coord
+getLowestTop [] curIdx curLow (x,y) = (x,y)
+getLowestTop list curIdx curLow (x,y) =
+    if curIdx == 0
+    then getLowestTop (tail list) (curIdx + 1) (head list) (0,curIdx)
+    else if (head list) < curLow
+         then getLowestTop (tail list) (curIdx + 1) (head list) (0,curIdx)
+         else getLowestTop (tail list) (curIdx + 1) curLow (x,y)
+--Helper
+--Find Next smallest Value (return Coords)
+jumpToSmallest :: [Int] -> [Int] -> Coord -> Coord
+jumpToSmallest topList botList (x,y) =
+    if y == 0
+    --Just consider below and right
+    then checkBelowRight (botList !! y) (botList !! (y+1)) (x,y)
+    else if y == (length topList) - 1
+    then checkLeftBelow (botList !! (y-1)) (botList !! y) (x,y)
+    else checkAllThree (botList !! (y-1)) (botList !! y) (botList !! (y+1)) (x,y)
+
+--Helper
+--Get Check for below and right (num1 below, num2 right)
+checkBelowRight :: Int -> Int -> Coord -> Coord
+checkBelowRight num1 num2 (x,y) =
+    if num1 <= num2
+    then (x+1,y)
+    else (x+1,y+1)
+
+checkLeftBelow :: Int -> Int -> Coord -> Coord
+checkLeftBelow num1 num2 (x,y) =
+    if num1 <= num2
+    then (x+1,y-1)
+    else (x+1,y)
+
+checkAllThree :: Int -> Int -> Int -> Coord -> Coord
+checkAllThree num1 num2 num3 (x,y) =
+    if num1 <= num2 && num1 <= num3
+    then (x+1,y-1)
+    else if num2 <= num3
+         then (x+1,y)
+         else (x+1,y+1)
+
+--Helper
+--Find Min Path given a Grid of Ints, starting coordinates, size of original list
+findVMinPath :: [[Int]] -> Coord -> Int -> Int -> [Coord]
+findVMinPath list (x,y) size currentLine =
+    if size > 1 && currentLine >= size
+    then []
+    else if x == 0 && size > 2 && currentLine < 1
+         then getLowestTop (head list) 0 0 (0,0) : jumpToSmallest (head list) (head (tail list)) (getLowestTop (head list) 0 0 (0,0)) :
+                    findVMinPath (tail list) (jumpToSmallest (head list) (head (tail list)) (getLowestTop (head list) 0 0 (0,0))) size (currentLine + 2)
+        else if size == 1
+            then [getLowestTop (head list) 0 0 (0,0)]
+            else if size == 2
+                then getLowestTop (head list) 0 0 (0,0) : [jumpToSmallest (head list) (head (tail list)) (getLowestTop (head list) 0 0 (0,0))]
+                else jumpToSmallest (head list) (head (tail list)) (x,y) : findVMinPath (tail list) (jumpToSmallest (head list) (head (tail list)) (x,y)) size (currentLine + 1)
 
 --Main
---Find best vertical path from top to bottom
+--Find best vertical path from top to bottom (Look for cheapest node at top and go from there)
 findVerticalPath :: Grid RGB -> Path
-findVerticalPath (G rgb) = [(0,1)]
+findVerticalPath (G rgb) = findVMinPath (makeMinGrid (noGEnergies (G rgb)) 0 (head (tail (noGEnergies (G rgb))))) (0,0) (height (G rgb)) 0
 
 --Main
 findHorizontalPath :: Grid RGB -> Path
-findHorizontalPath = undefined
+findHorizontalPath (G rgb) = undefined
 
 --Main
 removeVerticalPath :: Grid RGB -> Path -> Grid RGB
-removeVerticalPath = undefined
+removeVerticalPath (G rgb) [(x,y)] = undefined
 
 removeHorizontalPath :: Grid RGB -> Path -> Grid RGB
 removeHorizontalPath = undefined
