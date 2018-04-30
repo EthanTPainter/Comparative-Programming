@@ -119,6 +119,7 @@ public class P1
         int newWidth = energies.height();
         //Transpose energy grid
         energies = energies.transpose();
+        System.out.println(energies);
         //Set height and width
         energies.width = newWidth;
         energies.height = newHeight;

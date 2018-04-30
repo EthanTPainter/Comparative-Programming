@@ -1,6 +1,8 @@
 {- Name: Ethan Painter
    G#:   G00915079
    netID: epainte2
+   Note: Functions labeled "Main" are required via test cases
+         Functions labeled "Helper" are assistant functions to "Main" functions
 -}
 
 module Project3 where
@@ -36,28 +38,6 @@ data Node = Node
     (Node,Node,Node)  -- Three candidates we may connect to.
     | No   -- sometimes there is no next node and we use No as a placeholder.
     deriving (Show, Eq)
-------------------------------------------------------------------------
---TESTING
-g1 = G [
-  [ RGB 100  75 200,  RGB 100 100 200,  RGB 100 100 200,  RGB 100 100 200,  RGB 200 125 200],
-  [ RGB 150  30 180,  RGB 150  50 180,  RGB 100 120 180,  RGB 100 120 180,  RGB 100 120 180],
-  [ RGB 100  75 100,  RGB 100  80 100,  RGB 100  85 100,  RGB 100  95 100,  RGB 100 110 100],
-  [ RGB 200 100  10,  RGB 200 100  10,  RGB 200 100  10,  RGB 210 200  10,  RGB 255   0  10]]
-
-g5 = [
-  [ RGB 0 0 0,  RGB 0 0 0,  RGB 10 20 30,  RGB 0 0 0,  RGB 0 0 0,  RGB 0 0 0] ,
-  [ RGB 0 0 0,  RGB 2 3 4,  RGB  1  1  1,  RGB 5 6 7,  RGB 0 0 0,  RGB 0 0 0] ,
-  [ RGB 0 0 0,  RGB 0 0 0,  RGB 60 50 40,  RGB 0 0 0,  RGB 0 0 0,  RGB 0 0 0] ,
-  [ RGB 0 0 0,  RGB 0 0 0,  RGB  0  0  0,  RGB 0 0 0,  RGB 0 0 0,  RGB 0 0 0]
-  ]
-
-gN = [[0,1,2,3,4,5],[6,7,8,9,10,11],[12,13,14,15,16,17]]
-x1 = RGB 100 75 200
-x2 = [RGB 100 75 200, RGB 100 100 200, RGB 100 100 200, RGB 100 100 200, RGB 200 125 200]
-endNode1 = Node (1,1) (RGB 1 1 1) 1 1 No (No,No,No)
-g1packets = G [[((0,0),RGB 100 75 200,46925),((0,1),RGB 100 100 200,34525),((0,2),RGB 100 100 200,39300),((0,3),RGB 100 100 200,58025),((0,4),RGB 200 125 200,67950)],[((1,0),RGB 150 30 180,17400),((1,1),RGB 150 50 180,21000),((1,2),RGB 100 120 180,17625),((1,3),RGB 100 120 180,10025),((1,4),RGB 100 120 180,30825)],[((2,0),RGB 100 75 100,37200),((2,1),RGB 100 80 100,34000),((2,2),RGB 100 85 100,39525),((2,3),RGB 100 95 100,48025),((2,4),RGB 100 110 100,67725)],[((3,0),RGB 200 100 10,23025),((3,1),RGB 200 100 10,10400),((3,2),RGB 200 100 10,20325),((3,3),RGB 210 200 10,23050),((3,4),RGB 255 0 10,30325)]]
-g1packs = [[((0,0),RGB 100 75 200,46925),((0,1),RGB 100 100 200,34525),((0,2),RGB 100 100 200,39300),((0,3),RGB 100 100 200,58025),((0,4),RGB 200 125 200,67950)],[((1,0),RGB 150 30 180,17400),((1,1),RGB 150 50 180,21000),((1,2),RGB 100 120 180,17625),((1,3),RGB 100 120 180,10025),((1,4),RGB 100 120 180,30825)],[((2,0),RGB 100 75 100,37200),((2,1),RGB 100 80 100,34000),((2,2),RGB 100 85 100,39525),((2,3),RGB 100 95 100,48025),((2,4),RGB 100 110 100,67725)],[((3,0),RGB 200 100 10,23025),((3,1),RGB 200 100 10,10400),((3,2),RGB 200 100 10,20325),((3,3),RGB 210 200 10,23050),((3,4),RGB 255 0 10,30325)]]
---END TESTING
 
 --Main
 --How many columns are in the grid
@@ -101,13 +81,15 @@ getRight gridWidth x =
     else x + 1
 
 --Helper
---Get Above vertical y
+--Get Above vertical Y
 getAbove :: Int -> Int -> Int
 getAbove gridHeight y =
     if y == 0
     then gridHeight - 1
     else y - 1
 
+--Helper
+--Get Below vertical Y
 getBelow :: Int -> Int -> Int
 getBelow gridHeight y =
     if y == gridHeight - 1
@@ -209,6 +191,7 @@ energyAt (G grid) (x,y) =
     (getHorizEnergy (G grid) (x,y)) + (getVertEnergy (G grid) (x,y))
 
 --Helper
+--Get Row of Node Energies (Int)
 getEnergyRow :: Grid NodeEnergy -> Int -> Int -> [NodeEnergy]
 getEnergyRow (G grid) selectRow startIdx =
     if selectRow == startIdx
@@ -216,6 +199,7 @@ getEnergyRow (G grid) selectRow startIdx =
     else getEnergyRow (G (tail grid)) selectRow (startIdx + 1)
 
 --Helper
+--Get energy for column (Int)
 getEnergyCol :: Int -> Int -> [NodeEnergy] -> NodeEnergy
 getEnergyCol selectCol startIdx grid =
     if selectCol == startIdx
@@ -223,7 +207,7 @@ getEnergyCol selectCol startIdx grid =
     else getEnergyCol selectCol (startIdx + 1) (tail grid)
 
 --Helper
---Give Grid Locations for non RGB grids
+--Give Grid Locations for Grid Int
 getEnergyGridLoc :: Grid NodeEnergy -> Coord -> NodeEnergy
 getEnergyGridLoc (G grid) (x,y) = getEnergyCol y 0 (getEnergyRow (G grid) x 0)
 
@@ -255,8 +239,11 @@ calcGridEnergies (G rgb) startColIdx endColIdx =
 energies :: Grid RGB -> Grid NodeEnergy
 energies (G rgb) = G (calcGridEnergies (G rgb) 0 (height (G rgb)))
 
+--Helper
+--Calculate all energies in a Grid RGB, but leave off G from final result
 noGEnergies :: Grid RGB -> [[NodeEnergy]]
 noGEnergies (G rgb) = (calcGridEnergies (G rgb) 0 (height (G rgb)))
+
 --Main
 --Create Triplets
 nextGroups :: [a] -> a -> [(a,a,a)]
@@ -267,8 +254,8 @@ nextGroups list value =
          then [(value, head list, head (tail list)),(head list, head (tail list),value)]
          else nextGroupHelper list value 1 (length list)
 
---Helper for nextGroup
---Creates triplets
+--Helper
+--Helps creates triplets of when size is 3 or greater
 nextGroupHelper :: [a] -> a -> Int -> Int -> [(a,a,a)]
 nextGroupHelper list value curIdx quitNum=
     if curIdx == quitNum
@@ -281,12 +268,6 @@ nextGroupHelper list value curIdx quitNum=
 --Get Node Path Cost
 getNodePathCost :: Node -> PathCost
 getNodePathCost (Node _ _ _ v _ _) = v
-
---Helper
---May not be used.....
---Get Node Energy
-getNodeEnergy :: Node -> NodeEnergy
-getNodeEnergy (Node _ _ v _ _ _) = v
 
 --Helper
 --Get Minimum Node energy
@@ -388,18 +369,15 @@ packetsToNodes (G pack) = G (reverse (helpPacketsToNodes (G (reverse pack)) (nex
 --Given val, bot left, bot mid, bot right
 makeMinSum :: Int -> Int -> Int -> Int -> Int -> Int
 makeMinSum given x y z rowLen =
-    if rowLen == 0
-    then if y <= z
-         then getDuoMin y z
-         else if rowLen == (rowLen - 1)
-              then getDuoMin x y
+    if x == -1
+    then given + getDuoMin y z
+         else if z == -1
+              then given + getDuoMin x y
               else if x <= y && x <= z
                    then given + x
                    else if y <= z
                         then given + y
                         else given + z
-                        --This line below doesn't matter
-                        else 0
 --Helper
 --Get Min from two values
 getDuoMin :: Int -> Int -> Int
@@ -471,12 +449,16 @@ checkBelowRight num1 num2 (x,y) =
     then (x+1,y)
     else (x+1,y+1)
 
+--Helper
+--Get Check for left and below (num1 left, num2 below)
 checkLeftBelow :: Int -> Int -> Coord -> Coord
 checkLeftBelow num1 num2 (x,y) =
     if num1 <= num2
     then (x+1,y-1)
     else (x+1,y)
 
+--Helper
+--Get Check for all three nodes (num1 left, num2 below, num3 right)
 checkAllThree :: Int -> Int -> Int -> Coord -> Coord
 checkAllThree num1 num2 num3 (x,y) =
     if num1 <= num2 && num1 <= num3
@@ -487,6 +469,8 @@ checkAllThree num1 num2 num3 (x,y) =
 
 --Helper
 --Find Min Path given a Grid of Ints, starting coordinates, size of original list
+--List of Grid Int is intended to be Grid of summed energies (bottom to top implementation)
+--Look at top row, grab lowest value/index, scan lower three values for min until bottom row
 findVMinPath :: [[Int]] -> Coord -> Int -> Int -> [Coord]
 findVMinPath list (x,y) size currentLine =
     if size > 1 && currentLine >= size
@@ -503,27 +487,130 @@ findVMinPath list (x,y) size currentLine =
 --Main
 --Find best vertical path from top to bottom (Look for cheapest node at top and go from there)
 findVerticalPath :: Grid RGB -> Path
-findVerticalPath (G rgb) = findVMinPath (makeMinGrid (noGEnergies (G rgb)) 0 (head (tail (noGEnergies (G rgb))))) (0,0) (height (G rgb)) 0
+findVerticalPath (G rgb) = findVMinPath (reverse (makeMinGrid (reverse (noGEnergies (G rgb))) 0 [])) (0,0) (height (G rgb)) 0
+
+--Helper
+--Given a list of Coord, invert x and y Coord for each
+invertCoordsList :: [Coord] -> [Coord]
+invertCoordsList [] = []
+invertCoordsList list = (getY (head list),getX (head list)) : invertCoordsList (tail list)
+
+--Helper
+--Get X of Coord
+getX :: Coord -> Int
+getX (x,y) = x
+
+--Helper
+--Get Y of Coord
+getY :: Coord -> Int
+getY (x,y) = y
 
 --Main
+--Find Horizontal Path of a Grid RGB
 findHorizontalPath :: Grid RGB -> Path
-findHorizontalPath (G rgb) = undefined
+findHorizontalPath (G rgb) = invertCoordsList( findVMinPath (reverse (makeMinGrid (reverse (transpose (noGEnergies (G rgb)))) 0 [])) (0,0) (width (G rgb)) 0)
+
+--Helper
+--Given Row RGBs and Coord return new Row
+removeCoordRow :: [RGB] -> Coord -> Int -> [RGB]
+removeCoordRow [] _ curIdx= []
+removeCoordRow rgb (x,y) curIdx =
+    if y == curIdx
+    then (tail rgb)
+    else (head rgb) : removeCoordRow (tail rgb) (x,y) (curIdx + 1)
+
+--Helper
+--Given [[RGB]] and [Coord], return [[RGB]] without [Coord]
+removeCoordGrid :: [[RGB]] -> [Coord] -> [[RGB]]
+removeCoordGrid [] _ = []
+removeCoordGrid rgb path = removeCoordRow (head rgb) (head path) 0 : removeCoordGrid (tail rgb) (tail path)
 
 --Main
+--Given a Grid RGB, Path, return Grid RGB with path removed
 removeVerticalPath :: Grid RGB -> Path -> Grid RGB
-removeVerticalPath (G rgb) [(x,y)] = undefined
+removeVerticalPath (G rgb) path = G (removeCoordGrid rgb path)
 
+--Main
+--Given a Grid RGB, Path, return Grid RGB with path removed
+--Make sure to transpose grid after removal to return to standard grid shape
 removeHorizontalPath :: Grid RGB -> Path -> Grid RGB
-removeHorizontalPath = undefined
+removeHorizontalPath (G rgb) path = G (transpose (removeCoordGrid (transpose rgb) (invertCoordsList path)))
 
+--Helper
+--Get Sting of Row values
+--Row of RGB, STRING = "", INT = 0, INT = length Row
+getRowString :: [RGB] -> String -> Int -> Int-> String
+getRowString rgb str idx len=
+    if idx == len - 1
+    then show (getR (head rgb)) ++ " " ++ show (getG (head rgb)) ++ " " ++ show (getB (head rgb))
+    else show (getR (head rgb)) ++ " " ++ show (getG (head rgb)) ++ " " ++ show (getB (head rgb)) ++ "\n" ++ getRowString (tail rgb) str (idx + 1) len
+
+--Helper
+--Get String of Grid values in order from top row down
+getGridString :: [[RGB]] -> String -> Int -> Int -> String
+getGridString [] str idx len = str
+getGridString rgb str idx len =
+    if idx == len - 1
+    then getRowString (head rgb) str 0 (length (head rgb))
+    else getRowString (head rgb) str 0 (length (head rgb)) ++ "\n" ++ getGridString (tail rgb) str (idx + 1) len
+
+--Main
+--Given Grid RGB and name of PPM file, write the appropriate P3 format
+--of PPM file formatting into the file, and save
 gridToFile :: Grid RGB -> FilePath -> IO ()
-gridToFile = undefined
+gridToFile (G rgb) filePath = writeFile filePath ("P3\n" ++ show (width (G rgb)) ++ "\n" ++ show (height (G rgb)) ++ "\n" ++ "255\n" ++ getGridString rgb "" 0 (length rgb))
 
+--Main
+--Given filename, open it, read in the valid P3 formatted PPM contents,
+--And create and return Grid RGB
 fileToGrid :: FilePath -> IO (Grid RGB)
-fileToGrid = undefined
+fileToGrid filePath = (testingFile (listLines filePath))
+
+--Helper
+--Compile all possible variables needed for making RGB Grid
+testingFile :: IO[String] -> IO (Grid RGB)
+testingFile list = do
+    --New list
+    modList <- list
+    let format = (head modList)
+    let width = read (head (tail modList)) :: Int
+    let height = read (head (tail (tail modList))) :: Int
+    let gridList = (tail (tail (tail (tail modList))))
+    let curIdx = 0 :: Int
+    let good1DList = makeRGBRowsGivenFile gridList (height * width * 3) 0
+    return (G (make2D (height * width) width good1DList))
+
+--Helper
+--Make 2D List of RGB Rows
+make2D :: Int -> Int -> [a] -> [[a]]
+make2D 0 _ _ = []
+make2D num width list = take width list : make2D (num - width) width (recurse width list)
+
+--Helper
+--Help Recurse for making 2D array
+recurse :: Int -> [a] -> [a]
+recurse num [] = []
+recurse num list =
+    if num > 0
+    then recurse (num - 1) (tail list)
+    else list
+
+--Helper
+--Make Row given list of file inputs
+--String List, Width (length), current index -> RGB Row
+makeRGBRowsGivenFile :: [String] -> Int -> Int -> [RGB]
+makeRGBRowsGivenFile list width current =
+    if current == width
+    then []
+    else RGB (read (head list) :: Int) (read (head (tail list)) :: Int) (read (head (tail (tail list))) :: Int) : makeRGBRowsGivenFile (tail (tail (tail list))) width (current + 3)
+
+--Helper
+listLines :: FilePath -> IO [String]
+listLines = fmap words . readFile
 
 {-Secondary Author Note:
    Name: Ethan Painter
    G#:   G00915079
    netID: epainte2
+   Using this extra comment space as a backup for verification
 -}
