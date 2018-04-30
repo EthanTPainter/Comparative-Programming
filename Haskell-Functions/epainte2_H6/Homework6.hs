@@ -339,15 +339,22 @@ share4way value = undefined
 --The IO Monad (15%)
 --read one Int from the keyboard and return it.
 readNum :: IO Int
-readNum = undefined
+readNum = readLn
 
 --Given an integer n, ask for that many integers via the keyboard and return them.
 readNums :: Int -> IO[Int]
-readNums = undefined
+readNums num = do
+               if num == 0
+               then []
+               else readNumsHelper num []
+
+readNumsHelper :: Int -> [Int] -> IO [Int]
+readNumsHelper num currentList = do
+
 
 --Given a list of string-- s, echo them one at a time, with a second delay between.
 slowEcho :: [String] -> IO()
-slowEcho = undefined
+slowEcho list = undefined
 
 --Given two file names, open them, and check/answer if they have the exact same contents, ignoring case.
 crudeDiff :: FilePath -> FilePath -> IO Bool
