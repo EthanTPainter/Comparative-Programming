@@ -1,0 +1,3 @@
+(parens first)
+[then ] brackets and lastly { some
+{ braces } }

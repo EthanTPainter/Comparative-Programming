@@ -1,0 +1,2 @@
+THIS IS file A.
+case inSenSiTiViTy means it matches file A.

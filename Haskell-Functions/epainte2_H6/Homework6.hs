@@ -312,12 +312,9 @@ geometric startVal factor = do helpGeo startVal factor 0
 --Helper
 helpGeo :: Int -> Int -> Int -> [Int]
 helpGeo startVal factor startIdx = do
-    newVal <- [startVal * factor]
-    firstNewCall <- helpGeo startVal factor (startIdx + 1)
-    afterNewCall <- helpGeo (startVal * factor) factor (startIdx + 1)
     if startIdx == 0
     then startVal:helpGeo startVal factor (startIdx + 1)
-    else newVal:helpGeo (startVal * factor) factor (startIdx + 1)
+    else (startVal * factor):helpGeo (startVal * factor) factor (startIdx + 1)
 
 --Main
 --Infinite list M_1, M_2, M_3 following form:  M_n = 2^n - 1
@@ -334,7 +331,18 @@ helpMers start = do
 
 --Main
 share4way :: Int -> [(Int,Int,Int,Int)]
-share4way value = undefined
+share4way 1 = [(1,0,0,0)]
+share4way value = helpShare value value 0 0 0
+
+helpShare :: Int -> Int -> Int -> Int -> Int -> [(Int,Int,Int,Int)]
+helpShare 0 _ _ _ _ = []
+helpShare value fstVal sndVal thdVal frtVal
+    | fstVal == value = (helpShare value (value-1) 1 0 0) ++ [(value,0,0,0)]
+    | fstVal > 1 && sndVal >= 2 = (helpShare value fstVal (sndVal-1) (thdVal+1) frtVal) ++ [(fstVal, sndVal, thdVal, frtVal)]
+    | fstVal == (value-1) && sndVal == 1 = (helpShare value (fstVal-1) (sndVal+1) thdVal frtVal) ++ [(fstVal, sndVal, thdVal, frtVal)]
+    | fstVal > 1 && sndVal == 1 && thdVal == 1 = (helpShare value (fstVal-1) (sndVal) (thdVal) (frtVal+1)) ++ [(fstVal,sndVal,thdVal,frtVal)]
+    | fstVal == 1 && sndVal == 1 && thdVal == 1 && frtVal == 1 = [(fstVal,sndVal,thdVal,frtVal)]
+    | otherwise = []
 
 --The IO Monad (15%)
 --read one Int from the keyboard and return it.
@@ -344,23 +352,40 @@ readNum = readLn
 --Given an integer n, ask for that many integers via the keyboard and return them.
 readNums :: Int -> IO[Int]
 readNums num = do
-               if num == 0
-               then []
-               else readNumsHelper num []
+               array <- readNumsHelper num
+               return array
 
-readNumsHelper :: Int -> [Int] -> IO [Int]
-readNumsHelper num currentList = do
-
+readNumsHelper :: Int -> IO [Int]
+readNumsHelper 0 = return []
+readNumsHelper num = do
+                     line <- getLine
+                     nextInt <- readNumsHelper (num - 1)
+                     let someNum = read line::Int
+                     return (someNum:nextInt)
 
 --Given a list of string-- s, echo them one at a time, with a second delay between.
 slowEcho :: [String] -> IO()
-slowEcho list = undefined
+slowEcho [] = return ()
+slowEcho list = do
+                let headItem = head list
+                putStrLn (show headItem)
+                threadDelay 1000000
+                slowEcho (tail list)
 
 --Given two file names, open them, and check/answer if they have the exact same contents, ignoring case.
 crudeDiff :: FilePath -> FilePath -> IO Bool
-crudeDiff = undefined
+crudeDiff file1 file2 = do
+                        fileContents1 <- readFile file1
+                        fileContents2 <- readFile file2
+                        let ignoreCaseContents1 = map toUpper fileContents1
+                        let ignoreCaseContents2 = map toUpper fileContents2
+                        return (ignoreCaseContents1 == ignoreCaseContents2)
 
 --Given two filenames, go open them, dig through them and check if they have the same balanced parentheses/braces/square brackets. Ignore all other characters
 sameBrackets :: FilePath -> FilePath -> IO Bool
-sameBrackets = undefined
-
+sameBrackets file1 file2 = do
+               list1Contents <- readFile file1
+               list2Contents <- readFile file2
+               let boolOne = balanced list1Contents
+               let boolTwo = balanced list2Contents
+               return (boolOne && boolTwo)
