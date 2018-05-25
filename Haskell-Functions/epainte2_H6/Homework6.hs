@@ -60,24 +60,6 @@ getFirst (v,_) = v
 getSecond :: (Name,Name) -> Name
 getSecond (_,v) = v
 
-------------------
---Sample list
-tree = [
-  ("Animal", "Object"),
-  ("Cat","Animal"),
-  ("Dog","Animal"),
-  ("Siamese","Cat"),
-  ("Calico","Cat"),
-  ("Labrador","Dog"),
-  ("Pug","Dog"),
-  ("Book","Object"),
-  ("Garbage","Can")
-  ]
-
-heavy (a,b) = a>b
-
-----------
-
 --Main
 --Use do notation and rely on sample list
 ancestors :: Name -> FamilyTree -> Maybe [Name]
