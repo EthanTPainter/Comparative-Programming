@@ -2,6 +2,10 @@ Bridge Problem
 - Vehicles/Drivers want to cross the bridge going east to west or west to east
 - The bridge is observed having only one lane of traffic
 - ie. cars only travel one way while on the bridge, forcing cars in the other direction to wait
+- Maintain order of cars arriving at the bridge, crossing, and exiting bridge
+  - Cars arriving out of order is fine as long as they exit in the same order
+    - GOOD:  Arriving cars: 1,4,3,2,5      Exiting cars: 1,4,3,2,5
+    - BAD:   Arriving cars: 1,2,3,4,5      Exiting cars: 2,5,3,1,4
 
 Main functions in the vehicles/Bridge problem
 
