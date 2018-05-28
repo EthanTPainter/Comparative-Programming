@@ -31,7 +31,7 @@ Image-Smashing
   - Seam Carving Overview by Josh Hug (http://nifty.stanford.edu/2015/hug-seam-carving/)
   - Original SIG GRAPH video to complement the website listed above (https://www.youtube.com/watch?v=6NcIJXTlugc)\
 - LIMITATIONS: Current implementation is used for relatively small, easy to process images. Values are moved
-  around using Int variables/methods, so upper bound of Integer values is a concern with larger images and 
+  around using Int variables/methods, so upper bound of integer values is a concern with larger images and 
   larger values to process
 
 Haskell-Functions
