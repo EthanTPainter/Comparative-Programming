@@ -10,6 +10,13 @@ Concurrent-And-Distributed-Samples
   - Balancing foreground and background processes
   - as well as stopped or interrupted processes
 
+Encryption-Decryption-DES
+- Encryption and Decryption projects for data encryption standard (DES)
+- DES is old and insecure with modern computers, so use only for educational opportunities
+- Includes implementations of DES modes: ECB, CBC, CFB, and OFB
+- Implementations priovided in various languages: C, Python, Java
+- For modern encryption standards, see Advanced Encryption Standard (AES)
+
 Python Functions
 - Includes file for basic python functions (epainte2)
 - Includes testing file for verifying functionality (tester)
