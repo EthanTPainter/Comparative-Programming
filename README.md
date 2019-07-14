@@ -1,5 +1,7 @@
 # Comparative-Programming
 
+Projects described below: 
+
 ## Concurrent-And-Distributed-Samples
 - Projects focusing on concurrent/distributed concepts in programming
 - Projects rely on balancing multiple processes/threads at once
